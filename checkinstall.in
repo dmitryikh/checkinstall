@@ -2428,8 +2428,6 @@ Group:     $PKG_GROUP
 BuildRoot: $BROOTPATH
 Provides:  $PROVIDES
 Requires:  $REQUIRES,/bin/sh
-Recommends: $RECOMMENDS
-Suggests:  $SUGGESTS
 
 %description
 EOF
