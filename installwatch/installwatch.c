@@ -1695,12 +1695,14 @@ static int instw_setpathrel(instw_t *instw, int dirfd, const char *relpath) {
  * something is seriously messed up.
  */
 #define PROC_PATH_LEN 20
+#define PATH_LEN 1024
 	
 	debug(2,"instw_setpathrel(%p,%d,%s)\n",instw,dirfd,relpath);
 	int retval = -1, l;
-	char *newpath;
+	/* as far as /proc file system could violate POSIX standard, */
+	/* we can't rely on stat.st_size for symlink */
+	char newpath[PATH_LEN];
 	char proc_path[PROC_PATH_LEN];
-	struct stat s;
 
 
 	/* If dirfd is AT_FDCWD then we got nothing to do, return the */
@@ -1709,22 +1711,18 @@ static int instw_setpathrel(instw_t *instw, int dirfd, const char *relpath) {
 	if ( dirfd == AT_FDCWD ) return instw_setpath(instw, relpath);
 
 	snprintf(proc_path, PROC_PATH_LEN, "/proc/self/fd/%d", dirfd);
-	if(true_stat(proc_path, &s) == -1)
+	if(((l = true_readlink(proc_path, newpath, PATH_LEN)) == -1) ||
+			(strlen(relpath) + 2 + l > PATH_LEN))
 		goto out;
-	if(!(newpath = malloc(s.st_size+strlen(relpath)+2)))
-		goto out;
-	if((l = true_readlink(proc_path, newpath, s.st_size)) == -1)
-		goto free_out;
 	newpath[l] = '/';
 	strcpy(newpath + l + 1, relpath);
 	
 	retval = instw_setpath(instw, newpath);
 
-free_out:
-	free(newpath);
 out:
 	return retval;
 
+#undef PATH_LEN
 #undef PROC_PATH_LEN
 }
 #endif
