@@ -1,7 +1,7 @@
 # $Id: Makefile,v 1.6.2.1 2008/11/09 07:48:18 izto Exp $
 
 # Where to install.
-PREFIX=/usr/local
+PREFIX=/home/d.khominich/local/usr/local
 BINDIR=$(PREFIX)/sbin
 LCDIR=$(PREFIX)/lib/checkinstall/locale
 CONFDIR=$(PREFIX)/lib/checkinstall
@@ -28,7 +28,7 @@ install: all
 	
 	mkdir -p $(BINDIR)
 	mkdir -p $(LCDIR)
-	install -m 0755 -o root -g root checkinstall makepak $(BINDIR)
+	install -m 0755 -o d.khominich -g d.khominich checkinstall makepak $(BINDIR)
 	for file in locale/*.mo ; do \
 		CKLNG=`echo $$file | sed -e 's|locale/checkinstall-||' \
 			-e 's|\.mo||'` && \

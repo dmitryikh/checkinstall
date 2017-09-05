@@ -4,7 +4,7 @@
 # Well, the only configurable part is the following variable.
 # Make sure the directory you specify exists.
 
-PREFIX=/usr/local
+PREFIX=/home/d.khominich/local/usr/local
 
 # End of configurable part
 
