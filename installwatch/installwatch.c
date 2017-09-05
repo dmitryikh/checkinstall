@@ -2894,6 +2894,24 @@ int open(const char *pathname, int flags, ...) {
 	return result;
 }
 
+int __open_2(const char *pathname, int flags, ...) {
+/* Eventually, there is a third parameter: it's mode_t mode */
+	va_list ap;
+	mode_t mode;
+
+#if DEBUG
+	debug(2,"__open_2(%s,%d,mode)\n",pathname,flags);
+#endif
+
+	va_start(ap, flags);
+	mode = va_arg(ap, mode_t);
+	va_end(ap);
+
+	const int res = open(pathname, flags, mode);
+
+	return res;
+}
+
 /*
  *
  */
